@@ -1,10 +1,11 @@
 package ru.vkokourov.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Currency {
     private int id;
     private String code;

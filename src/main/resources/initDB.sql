@@ -23,3 +23,5 @@ CREATE TABLE IF NOT EXISTS exchange_rates
         REFERENCES currencies (id) ON DELETE CASCADE
 );
 
+CREATE UNIQUE INDEX idx_base_target
+    ON exchange_rates (base_currency_id, target_currency_id);
