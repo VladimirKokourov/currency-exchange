@@ -2,6 +2,7 @@ package ru.vkokourov.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.vkokourov.model.Currency;
+import ru.vkokourov.util.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,23 +13,15 @@ public class CurrencyRepository {
 
     public static final String SELECT_ALL = "SELECT * FROM currencies";
 
-    private Connection connection;
+    private final ConnectionPool connectionPool;
 
-    public CurrencyRepository() {
-        try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:currency_exchange.db");
-        } catch (ClassNotFoundException e) {
-            log.debug("Can't get class. No driver found");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            log.debug("Can't get connection. Incorrect URL");
-            e.printStackTrace();
-        }
+    public CurrencyRepository(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
     }
 
     public List<Currency> getAll() {
         List<Currency> currencies = new ArrayList<>();
+        Connection connection = connectionPool.getConnection();
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(SELECT_ALL)) {
@@ -42,6 +35,8 @@ public class CurrencyRepository {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            connectionPool.releaseConnection(connection);
         }
 
         return currencies;

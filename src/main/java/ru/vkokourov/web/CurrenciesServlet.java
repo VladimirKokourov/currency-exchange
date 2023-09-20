@@ -3,9 +3,10 @@ package ru.vkokourov.web;
 import lombok.extern.slf4j.Slf4j;
 import ru.vkokourov.model.Currency;
 import ru.vkokourov.repository.CurrencyRepository;
+import ru.vkokourov.util.ConnectionPool;
 import ru.vkokourov.util.JsonUtil;
 
-import javax.servlet.ServletException;
+import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,9 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     public void init() {
-        repository = new CurrencyRepository();
+        ServletContext ctx = getServletContext();
+        ConnectionPool connectionPool = (ConnectionPool) ctx.getAttribute("ConnectionPool");
+        repository = new CurrencyRepository(connectionPool);
     }
 
     @Override

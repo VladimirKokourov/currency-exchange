@@ -5,4 +5,12 @@
 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
   <display-name>Archetype Created Web Application</display-name>
+    <context-param>
+        <param-name>DBURL</param-name>
+        <param-value>jdbc:sqlite:currency_exchange.db</param-value>
+    </context-param>
+    <context-param>
+        <param-name>DBDRIVER</param-name>
+        <param-value>org.sqlite.JDBC</param-value>
+    </context-param>
 </web-app>
