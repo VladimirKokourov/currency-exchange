@@ -5,12 +5,24 @@
 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
   <display-name>Archetype Created Web Application</display-name>
+
     <context-param>
         <param-name>DBURL</param-name>
         <param-value>jdbc:sqlite:currency_exchange.db</param-value>
     </context-param>
+
     <context-param>
         <param-name>DBDRIVER</param-name>
         <param-value>org.sqlite.JDBC</param-value>
     </context-param>
+
+    <error-page>
+        <exception-type>javax.servlet.ServletException</exception-type>
+        <location>/exceptions</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errors</location>
+    </error-page>
 </web-app>
