@@ -25,7 +25,8 @@ public class AppContextListener implements ServletContextListener {
             ConnectionPool connectionPool = ConnectionPool.create(url, driver);
             ctx.setAttribute("ConnectionPool", connectionPool);
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("Ошибка подключения к БД");
+            throw new RuntimeException(e);
         }
     }
 

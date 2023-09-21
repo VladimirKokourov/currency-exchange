@@ -7,6 +7,7 @@ import ru.vkokourov.util.ConnectionPool;
 import ru.vkokourov.util.JsonUtil;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,8 +29,8 @@ public class CurrenciesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        log.info("getAll()");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.info("Get all currencies from Servlet");
         List<Currency> currencies = repository.getAll();
         resp.getWriter().write(JsonUtil.writeJson(currencies));
         resp.setStatus(HttpServletResponse.SC_OK);

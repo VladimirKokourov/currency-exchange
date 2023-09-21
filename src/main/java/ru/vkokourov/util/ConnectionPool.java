@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("ALL")
 public class ConnectionPool {
 
     private static final int INITIAL_POOL_SIZE = 10;
