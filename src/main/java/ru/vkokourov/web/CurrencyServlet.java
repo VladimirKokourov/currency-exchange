@@ -2,9 +2,7 @@ package ru.vkokourov.web;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.vkokourov.model.Currency;
-import ru.vkokourov.repository.CurrencyRepository;
 import ru.vkokourov.service.CurrencyService;
-import ru.vkokourov.util.ConnectionPool;
 import ru.vkokourov.util.JsonUtil;
 
 import javax.servlet.ServletContext;
@@ -14,11 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/currencies")
 @Slf4j
-public class CurrenciesServlet extends HttpServlet {
+@WebServlet("/currency/*")
+public class CurrencyServlet extends HttpServlet {
 
     private CurrencyService service;
 
@@ -30,9 +27,10 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info("Get all currencies from Servlet");
-        List<Currency> currencies = service.getAll();
-        resp.getWriter().write(JsonUtil.writeJson(currencies));
+        String code = req.getPathInfo().replace("/", "").toUpperCase();
+        log.info("Get currency {} from Servlet", code);
+        Currency currency = service.getByCode(code);
+        resp.getWriter().write(JsonUtil.writeJson(currency));
         resp.setStatus(HttpServletResponse.SC_OK);
     }
 }

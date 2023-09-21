@@ -4,7 +4,6 @@ import ru.vkokourov.exception.ErrorMessage;
 import ru.vkokourov.util.JsonUtil;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +28,6 @@ public class ErrorServlet extends HttpServlet {
         Integer statusCode = (Integer) req.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
         resp.setStatus(statusCode);
-        resp.getWriter().write(JsonUtil.writeJson(new ErrorMessage(statusCode, message)));
+        resp.getWriter().write(JsonUtil.writeJson(new ErrorMessage(message)));
     }
 }

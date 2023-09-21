@@ -1,6 +1,8 @@
 package ru.vkokourov;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.vkokourov.repository.CurrencyRepository;
+import ru.vkokourov.service.CurrencyService;
 import ru.vkokourov.util.ConnectionPool;
 
 import javax.servlet.ServletContext;
@@ -21,13 +23,18 @@ public class AppContextListener implements ServletContextListener {
         String url = ctx.getInitParameter("DBURL");
         String driver = ctx.getInitParameter("DBDRIVER");
         log.info("Create connection pool");
+        ConnectionPool connectionPool;
         try {
-            ConnectionPool connectionPool = ConnectionPool.create(url, driver);
-            ctx.setAttribute("ConnectionPool", connectionPool);
+            connectionPool = ConnectionPool.create(url, driver);
         } catch (SQLException | ClassNotFoundException e) {
             log.error("Ошибка подключения к БД");
             throw new RuntimeException(e);
         }
+
+        CurrencyRepository currencyRepository = new CurrencyRepository(connectionPool);
+        CurrencyService currencyService = new CurrencyService(currencyRepository);
+
+        ctx.setAttribute("CurrencyService", currencyService);
     }
 
     @Override

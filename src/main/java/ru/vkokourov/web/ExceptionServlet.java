@@ -1,5 +1,6 @@
 package ru.vkokourov.web;
 
+import ru.vkokourov.exception.ApplicationException;
 import ru.vkokourov.exception.ErrorMessage;
 import ru.vkokourov.util.JsonUtil;
 
@@ -29,7 +30,12 @@ public class ExceptionServlet extends HttpServlet {
         String message = throwable.getMessage();
         Integer statusCode = (Integer) req.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
+        if (throwable instanceof ApplicationException) {
+            ApplicationException ae = (ApplicationException) throwable;
+            statusCode = ae.getStatusCode();
+        }
+
         resp.setStatus(statusCode);
-        resp.getWriter().write(JsonUtil.writeJson(new ErrorMessage(statusCode, message)));
+        resp.getWriter().write(JsonUtil.writeJson(new ErrorMessage(message)));
     }
 }
