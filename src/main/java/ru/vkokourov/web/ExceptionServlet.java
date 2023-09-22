@@ -26,14 +26,9 @@ public class ExceptionServlet extends HttpServlet {
     }
 
     private void processError(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Throwable throwable = (Throwable) req.getAttribute("javax.servlet.error.exception");
-        String message = throwable.getMessage();
-        Integer statusCode = (Integer) req.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-
-        if (throwable instanceof ApplicationException) {
-            ApplicationException ae = (ApplicationException) throwable;
-            statusCode = ae.getStatusCode();
-        }
+        ApplicationException ae = (ApplicationException) req.getAttribute("javax.servlet.error.exception");
+        String message = ae.getMessage();
+        int statusCode = ae.getStatusCode();
 
         resp.setStatus(statusCode);
         resp.getWriter().write(JsonUtil.writeJson(new ErrorMessage(message)));

@@ -27,6 +27,10 @@ public class ErrorServlet extends HttpServlet {
         String message = (String) req.getAttribute(RequestDispatcher.ERROR_MESSAGE);
         Integer statusCode = (Integer) req.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
+        if (statusCode == 500) {
+            message = "Что-то пошло не так";
+        }
+
         resp.setStatus(statusCode);
         resp.getWriter().write(JsonUtil.writeJson(new ErrorMessage(message)));
     }
