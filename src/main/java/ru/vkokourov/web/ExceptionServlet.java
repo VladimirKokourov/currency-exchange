@@ -4,8 +4,6 @@ import ru.vkokourov.exception.ApplicationException;
 import ru.vkokourov.exception.ErrorMessage;
 import ru.vkokourov.util.JsonUtil;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

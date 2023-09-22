@@ -2,6 +2,7 @@ package ru.vkokourov.service;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.vkokourov.exception.InvalidDataException;
+import ru.vkokourov.exception.NotExistException;
 import ru.vkokourov.model.Currency;
 import ru.vkokourov.repository.CurrencyRepository;
 import ru.vkokourov.util.ValidationUtil;
@@ -33,6 +34,10 @@ public class CurrencyService {
             log.error("Incorrect code input {}", code);
             throw new InvalidDataException("Некорректный ввод кода валюты");
         }
-        return repository.getByCode(code);
+        Currency currency = repository.getByCode(code);
+        if (currency.getId() == 0) {
+            throw new NotExistException("Валюта не найдена");
+        }
+        return currency;
     }
 }
