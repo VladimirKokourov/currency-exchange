@@ -1,8 +1,7 @@
 package ru.vkokourov.service;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.vkokourov.exception.InvalidDataException;
-import ru.vkokourov.exception.NotExistException;
+import ru.vkokourov.exception.*;
 import ru.vkokourov.model.Currency;
 import ru.vkokourov.repository.CurrencyRepository;
 import ru.vkokourov.util.ValidationUtil;
@@ -39,5 +38,10 @@ public class CurrencyService {
             throw new NotExistException("Валюта не найдена");
         }
         return currency;
+    }
+
+    public Currency save(Currency currency) throws ApplicationException {
+        log.info("Save currency from service. {}", currency);
+        return repository.create(currency);
     }
 }
