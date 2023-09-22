@@ -25,6 +25,10 @@ public class CurrencyService {
 
     public Currency getByCode(String code) throws ServletException {
         log.info("Get currency {} from service", code);
+        if (code.isEmpty()) {
+            log.error("The currency code is missing from the address");
+            throw new InvalidDataException("Код валюты отсутствует в адресе");
+        }
         if (!ValidationUtil.isCodeValid(code)) {
             log.error("Incorrect code input {}", code);
             throw new InvalidDataException("Некорректный ввод кода валюты");

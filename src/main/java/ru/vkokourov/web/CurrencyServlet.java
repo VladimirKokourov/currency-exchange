@@ -1,6 +1,7 @@
 package ru.vkokourov.web;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.vkokourov.exception.InvalidDataException;
 import ru.vkokourov.model.Currency;
 import ru.vkokourov.service.CurrencyService;
 import ru.vkokourov.util.JsonUtil;
@@ -27,7 +28,11 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String code = req.getPathInfo().replace("/", "").toUpperCase();
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null) {
+            throw new InvalidDataException("Код валюты отсутствует в адресе");
+        }
+        String code = pathInfo.replace("/", "").toUpperCase();
         log.info("Get currency {} from Servlet", code);
         Currency currency = service.getByCode(code);
         resp.getWriter().write(JsonUtil.writeJson(currency));
