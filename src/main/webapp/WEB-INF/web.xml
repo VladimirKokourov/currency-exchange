@@ -26,9 +26,9 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
         <location>/errors</location>
     </error-page>
 
-
     <error-page>
         <error-code>500</error-code>
         <location>/errors</location>
     </error-page>
+
 </web-app>

@@ -3,6 +3,7 @@ package ru.vkokourov.repository;
 import lombok.extern.slf4j.Slf4j;
 import ru.vkokourov.exception.AlreadyExistException;
 import ru.vkokourov.exception.ApplicationException;
+import ru.vkokourov.exception.NotExistException;
 import ru.vkokourov.exception.ServerException;
 import ru.vkokourov.model.Currency;
 import ru.vkokourov.util.ConnectionPool;
@@ -17,6 +18,7 @@ public class CurrencyRepository {
     private static final String SELECT_ALL = "SELECT * FROM currencies";
     private static final String SELECT_BY_CODE = "SELECT * FROM currencies WHERE code=?";
     private static final String CREATE = "INSERT INTO currencies(code, full_name, sign) VALUES (?,?,?)";
+    private static final String UPDATE = "UPDATE currencies SET code=?, full_name=?, sign=? WHERE id=?";
     private static final int ERROR_CODE_UNIQUE_CONSTRAINT_FAILED = 19;
 
     private final ConnectionPool connectionPool;
@@ -74,7 +76,8 @@ public class CurrencyRepository {
             stmt.setString(1, currency.getCode());
             stmt.setString(2, currency.getFullName());
             stmt.setString(3, currency.getSign());
-            stmt.executeUpdate();
+            int i = stmt.executeUpdate();
+            log.info("number {}", i);
         } catch (SQLException e) {
             log.error(e.getMessage());
             if (e.getErrorCode() == ERROR_CODE_UNIQUE_CONSTRAINT_FAILED) {
@@ -90,6 +93,27 @@ public class CurrencyRepository {
         currency.setId(id);
 
         return currency;
+    }
+
+    public void update(Currency currency) throws ApplicationException {
+        log.info("Update currency from repository. {}", currency);
+        Connection connection = connectionPool.getConnection();
+
+        try (PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
+            stmt.setString(1, currency.getCode());
+            stmt.setString(2, currency.getFullName());
+            stmt.setString(3, currency.getSign());
+            stmt.setInt(4, currency.getId());
+            if (stmt.executeUpdate() == 0) {
+                log.error("Count update rows equals zero");
+                throw new NotExistException("Валюты с id:" + currency.getId() + " не существует");
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new ServerException("Ошибка записи в БД");
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
     }
 
     private void fillCurrency(Currency currency, ResultSet rs) throws SQLException {

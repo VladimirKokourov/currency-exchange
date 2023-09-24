@@ -40,8 +40,13 @@ public class CurrencyService {
         return currency;
     }
 
-    public Currency save(Currency currency) throws ApplicationException {
-        log.info("Save currency from service. {}", currency);
+    public Currency create(Currency currency) throws ApplicationException {
+        log.info("Create currency from service. {}", currency);
         return repository.create(currency);
+    }
+
+    public void update(Currency currency) throws ApplicationException {
+        log.info("Update currency from service. {}", currency);
+        repository.update(currency);
     }
 }
