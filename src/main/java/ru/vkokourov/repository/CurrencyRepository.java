@@ -1,10 +1,7 @@
 package ru.vkokourov.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.vkokourov.exception.AlreadyExistException;
-import ru.vkokourov.exception.ApplicationException;
-import ru.vkokourov.exception.NotExistException;
-import ru.vkokourov.exception.ServerException;
+import ru.vkokourov.exception.*;
 import ru.vkokourov.model.Currency;
 import ru.vkokourov.util.ConnectionPool;
 
@@ -110,7 +107,11 @@ public class CurrencyRepository {
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
-            throw new ServerException("Ошибка записи в БД");
+            if (e.getMessage().contains("SQLITE_CONSTRAINT_UNIQUE")) {
+                throw new NotExistException("Валюты с id:" + currency.getId() + " и code:" + currency.getCode() + " не существует");
+            } else {
+                throw new ServerException("Ошибка записи в БД");
+            }
         } finally {
             connectionPool.releaseConnection(connection);
         }
