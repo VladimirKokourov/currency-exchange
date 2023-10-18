@@ -21,8 +21,8 @@ import java.util.Map;
 
 import static javax.servlet.http.HttpServletResponse.*;
 
-@WebServlet("/currencies")
 @Slf4j
+@WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
 
     private CurrencyService service;

@@ -1,14 +1,15 @@
 package ru.vkokourov.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-public class ExchangeRates {
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+public class ExchangeRate {
     private int id;
     private Currency baseCurrency;
     private Currency targetCurrency;

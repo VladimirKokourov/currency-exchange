@@ -2,7 +2,9 @@ package ru.vkokourov;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.vkokourov.repository.CurrencyRepository;
+import ru.vkokourov.repository.ExchangeRateRepository;
 import ru.vkokourov.service.CurrencyService;
+import ru.vkokourov.service.ExchangeRateService;
 import ru.vkokourov.util.ConnectionPool;
 
 import javax.servlet.ServletContext;
@@ -34,7 +36,11 @@ public class AppContextListener implements ServletContextListener {
         CurrencyRepository currencyRepository = new CurrencyRepository(connectionPool);
         CurrencyService currencyService = new CurrencyService(currencyRepository);
 
+        ExchangeRateRepository exchangeRateRepository = new ExchangeRateRepository(connectionPool);
+        ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateRepository);
+
         ctx.setAttribute("CurrencyService", currencyService);
+        ctx.setAttribute("ExchangeRateService", exchangeRateService);
     }
 
     @Override
